@@ -7,14 +7,72 @@
     android:layout_height="match_parent"
     tools:context=".ui.main.MainFragment">
 
-    <TextView
-        android:id="@+id/message"
+    <EditText
+        android:id="@+id/wifi_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/wifi_network_name"
+        android:inputType="text"
+        android:maxLines="1"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/latitude_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/latitude"
+        android:inputType="numberDecimal"
+        android:maxLines="1"
+        app:layout_constraintTop_toBottomOf="@id/wifi_edit" />
+
+    <EditText
+        android:id="@+id/longitude_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/longitude"
+        android:inputType="numberDecimal"
+        android:maxLines="1"
+        app:layout_constraintTop_toBottomOf="@id/latitude_edit" />
+
+    <EditText
+        android:id="@+id/radius_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/radius"
+        android:inputType="numberDecimal"
+        android:maxLines="1"
+        app:layout_constraintTop_toBottomOf="@id/longitude_edit" />
+
+    <Button
+        android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="MainFragment"
+        android:text="@string/start"
+        app:layout_constraintTop_toBottomOf="@id/radius_edit" />
+
+    <TextView
+        android:id="@+id/inside_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_green_light"
+        android:gravity="center"
+        android:text="@string/inside"
+        android:textAllCaps="true"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintWidth_percent="0.5" />
+
+    <TextView
+        android:id="@+id/outside_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_red_light"
+        android:gravity="center"
+        android:text="@string/outside"
+        android:textAllCaps="true"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintWidth_percent="0.5" />
 
 </android.support.constraint.ConstraintLayout>
