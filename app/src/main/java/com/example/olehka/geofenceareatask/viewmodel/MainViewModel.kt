@@ -1,9 +1,15 @@
 package com.example.olehka.geofenceareatask.viewmodel
 
-import android.arch.lifecycle.ViewModel
+import android.app.Application
+import android.arch.lifecycle.AndroidViewModel
 import com.example.olehka.geofenceareatask.geofence.GeofenceManager
 
-class MainViewModel(val geofenceManager: GeofenceManager) : ViewModel() {
+class MainViewModel(
+        application: Application,
+        val geofenceManager: GeofenceManager
+) : AndroidViewModel(application) {
+
+    val networkLiveData = NetworkLiveData(application)
 
     override fun onCleared() {
         geofenceManager.removeGeofences()

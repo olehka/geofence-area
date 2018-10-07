@@ -42,8 +42,10 @@ class MainFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val factory = InjectorUtility.provideMainViewModelFactory(context!!.applicationContext)
+        val factory = InjectorUtility.provideMainViewModelFactory(activity!!.application)
         viewModel = ViewModelProviders.of(this, factory).get(MainViewModel::class.java)
+        viewModel.networkLiveData.observe(this, Observer {  })
+
         GeofenceTransitionsIntentService.geofenceData.observe(this, Observer { updateStatus(it) })
     }
 
@@ -59,7 +61,7 @@ class MainFragment : Fragment() {
                     }
                 } else {
                     Log.e(TAG, "Permission denied")
-                    Snackbar.make(binding.root, R.string.permission_denied_explanation, Snackbar.LENGTH_LONG);
+                    Snackbar.make(binding.root, R.string.permission_denied_explanation, Snackbar.LENGTH_LONG)
                 }
             }
         }
