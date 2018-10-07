@@ -1,11 +1,12 @@
-package com.example.olehka.geofenceareatask
+package com.example.olehka.geofenceareatask.geofence
 
 import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import com.example.olehka.geofenceareatask.ui.main.MainFragment
+import com.example.olehka.geofenceareatask.ui.MainFragment
+import com.example.olehka.geofenceareatask.ui.TAG
 import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofencingRequest
 import com.google.android.gms.location.LocationServices

@@ -1,8 +1,8 @@
-package com.example.olehka.geofenceareatask
+package com.example.olehka.geofenceareatask.ui
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import com.example.olehka.geofenceareatask.ui.main.MainFragment
+import com.example.olehka.geofenceareatask.R
 
 const val TAG = "GeofenceAreaTask"
 

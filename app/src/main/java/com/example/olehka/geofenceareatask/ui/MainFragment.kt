@@ -1,4 +1,4 @@
-package com.example.olehka.geofenceareatask.ui.main
+package com.example.olehka.geofenceareatask.ui
 
 import android.Manifest
 import android.arch.lifecycle.Observer
@@ -12,12 +12,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.olehka.geofenceareatask.GeofenceManager
-import com.example.olehka.geofenceareatask.GeofenceTransitionsIntentService
 import com.example.olehka.geofenceareatask.R
-import com.example.olehka.geofenceareatask.TAG
+import com.example.olehka.geofenceareatask.geofence.GeofenceManager
+import com.example.olehka.geofenceareatask.geofence.GeofenceTransitionsIntentService
 import com.example.olehka.geofenceareatask.databinding.MainFragmentBinding
 import com.example.olehka.geofenceareatask.util.InjectorUtility
+import com.example.olehka.geofenceareatask.viewmodel.MainViewModel
 import com.google.android.gms.location.Geofence
 
 class MainFragment : Fragment() {

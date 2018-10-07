@@ -1,8 +1,8 @@
 package com.example.olehka.geofenceareatask.util
 
 import android.content.Context
-import com.example.olehka.geofenceareatask.GeofenceManager
-import com.example.olehka.geofenceareatask.ui.main.MainViewModelFactory
+import com.example.olehka.geofenceareatask.geofence.GeofenceManager
+import com.example.olehka.geofenceareatask.viewmodel.MainViewModelFactory
 
 object InjectorUtility {
 

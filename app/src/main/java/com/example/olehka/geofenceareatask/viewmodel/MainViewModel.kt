@@ -1,7 +1,7 @@
-package com.example.olehka.geofenceareatask.ui.main
+package com.example.olehka.geofenceareatask.viewmodel
 
 import android.arch.lifecycle.ViewModel
-import com.example.olehka.geofenceareatask.GeofenceManager
+import com.example.olehka.geofenceareatask.geofence.GeofenceManager
 
 class MainViewModel(val geofenceManager: GeofenceManager) : ViewModel() {
 

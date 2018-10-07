@@ -1,9 +1,10 @@
-package com.example.olehka.geofenceareatask
+package com.example.olehka.geofenceareatask.geofence
 
 import android.app.IntentService
 import android.arch.lifecycle.MutableLiveData
 import android.content.Intent
 import android.util.Log
+import com.example.olehka.geofenceareatask.ui.TAG
 import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofencingEvent
 
