@@ -43,7 +43,8 @@ class GeofenceManager(val context: Context) {
 
     fun getGeofenceRequest(): GeofencingRequest =
             GeofencingRequest.Builder().apply {
-                setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_EXIT)
+                setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER or
+                        GeofencingRequest.INITIAL_TRIGGER_EXIT)
                 addGeofence(geofence)
             }.build()
 
