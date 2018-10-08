@@ -11,7 +11,7 @@ import android.net.wifi.WifiManager
 import android.util.Log
 import com.example.olehka.geofenceareatask.ui.TAG
 
-class NetworkLiveData(val application: Application) : LiveData<Int>() {
+class NetworkLiveData(val application: Application) : LiveData<String>() {
 
     private val connectivityManager =
             application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -23,10 +23,12 @@ class NetworkLiveData(val application: Application) : LiveData<Int>() {
         override fun onAvailable(network: Network?) {
             val ssid = wifiManager.connectionInfo.ssid
             Log.i(TAG, "Network available: $ssid")
+            postValue(ssid)
         }
 
         override fun onLost(network: Network?) {
             Log.i(TAG, "Network lost")
+            postValue("")
         }
     }
 

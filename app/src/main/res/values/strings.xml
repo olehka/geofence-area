@@ -9,5 +9,6 @@
     <string name="outside">Outside</string>
     <string name="start">Start</string>
     <string name="stop">Stop</string>
+    <string name="check">Check</string>
     <string name="permission_denied_explanation">Permission was denied, but is needed for core functionality.</string>
 </resources>

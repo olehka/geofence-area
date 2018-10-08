@@ -14,8 +14,7 @@ import com.google.android.gms.location.LocationServices
 class GeofenceManager(val context: Context) {
 
     companion object {
-        const val ADD_GEOFENCE = 1001
-        const val REMOVE_GEOFENCE = 1002
+        const val REQUEST_ID = "1001"
     }
 
     private val geofencingClient = LocationServices.getGeofencingClient(context)
@@ -28,7 +27,7 @@ class GeofenceManager(val context: Context) {
 
     fun createGeofenceObject(latitude: Double, longitude: Double, radius: Float) {
         geofence = Geofence.Builder()
-                .setRequestId("")
+                .setRequestId(REQUEST_ID)
                 .setCircularRegion(
                         latitude,
                         longitude,
