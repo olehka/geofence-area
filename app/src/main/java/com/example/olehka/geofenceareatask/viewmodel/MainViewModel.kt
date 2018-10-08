@@ -27,6 +27,9 @@ class MainViewModel(
     val mediatorLiveData = MediatorLiveData<Status>()
 
     var wifiName: String? = null
+    var latitude: Double? = null
+    var longitude: Double? = null
+    var radius: Float? = null
 
     init {
         mediatorLiveData.addSource(networkLiveData) { updateStatus() }
@@ -47,15 +50,12 @@ class MainViewModel(
         }
     }
 
-    fun startGeofencing(latitude: Double?, longitude: Double?, radius: Float?): Boolean {
-        if (latitude == null || longitude == null || radius == null ||
-                latitude < -90 || latitude > 90 ||
-                longitude < -180 || longitude > 180 ||
-                radius < 0) {
+    fun startGeofencing(): Boolean {
+        if (invalidGeofence()) {
             Log.e(TAG, "Invalid geofencing data")
             return false
         }
-        geofenceManager.createGeofenceObject(latitude, longitude, radius)
+        geofenceManager.createGeofenceObject(latitude!!, longitude!!, radius!!)
         if (hasGeofencePermissions()) {
             geofenceManager.removeGeofences()
             geofenceManager.addGeofences()
@@ -74,7 +74,7 @@ class MainViewModel(
     }
 
     private fun checkGeofenceZone(): Boolean {
-        if (geofenceLiveData.value == null) {
+        if (invalidGeofence() || geofenceLiveData.value == null) {
             return false
         }
         return geofenceLiveData.value == Geofence.GEOFENCE_TRANSITION_ENTER
@@ -82,4 +82,10 @@ class MainViewModel(
 
     private fun hasGeofencePermissions(): Boolean = ContextCompat.checkSelfPermission(getApplication(),
             Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+
+    private fun invalidGeofence(): Boolean =
+            latitude == null || longitude == null || radius == null ||
+                    latitude!! < -90 || latitude!! > 90 ||
+                    longitude!! < -180 || longitude!! > 180 ||
+                    radius!! < 0
 }

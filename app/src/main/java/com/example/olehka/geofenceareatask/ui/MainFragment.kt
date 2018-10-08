@@ -59,15 +59,15 @@ class MainFragment : Fragment() {
 
     private fun onCheckClicked() {
         viewModel.wifiName = binding.wifiEdit.text.toString()
-        val hasValidGeofences = viewModel.startGeofencing(
-                binding.latitudeEdit.text.toString().toDoubleOrNull(),
-                binding.longitudeEdit.text.toString().toDoubleOrNull(),
-                binding.radiusEdit.text.toString().toFloatOrNull()
-        )
-        viewModel.updateStatus()
+        viewModel.latitude = binding.latitudeEdit.text.toString().toDoubleOrNull()
+        viewModel.longitude = binding.longitudeEdit.text.toString().toDoubleOrNull()
+        viewModel.radius = binding.radiusEdit.text.toString().toFloatOrNull()
+
+        val hasValidGeofences = viewModel.startGeofencing()
         if (hasValidGeofences && !hasGeofencePermissions()) {
             requestGeofencePermissions(REQUEST_CODE_GEOFENCE)
         }
+        viewModel.updateStatus()
     }
 
     private fun hasGeofencePermissions(): Boolean = ContextCompat.checkSelfPermission(context!!,

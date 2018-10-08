@@ -3,7 +3,7 @@
     <string name="wifi">Wi-Fi</string>
     <string name="latitude">Latitude</string>
     <string name="longitude">Longitude</string>
-    <string name="radius">Radius</string>
+    <string name="radius_in_meters">Radius in meters</string>
     <string name="wifi_network_name">Wi-Fi network name</string>
     <string name="inside">Inside</string>
     <string name="outside">Outside</string>
