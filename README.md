@@ -6,15 +6,15 @@ Geofence area is defined as a combination of some geographic point, radius, and 
 
 ## Instructions
 
-To configure geofence area enter Wi-Fi network name AND/OR circular region (latitude, longitude, radius in meters).
-
+To configure geofence area enter Wi-Fi network name and/or circular region (latitude, longitude, radius in meters).
+To choose a place on Google Maps press PLACE PICKER button.
 To start geofence area detection press CHECK button. You can see INSIDE/OUTSIDE status at the bottom.
 
 Latitude: between -90 and +90 degrees inclusive.
 Longitude: between -180 and +180 degrees inclusize.
 
-![](./screenshots/device-2018-10-08-112431.png)&nbsp;&nbsp;&nbsp;&nbsp;
-![](./screenshots/device-2018-10-08-104326.png)
+![](./screenshots/device-2018-10-09-195147.png)&nbsp;&nbsp;&nbsp;&nbsp;
+![](./screenshots/device-2018-10-09-195101.png)
 
 ## Monitoring geofences
 
@@ -27,4 +27,4 @@ Application is based on [Android Architecture Components](https://developer.andr
 
 ## Upcoming features
 
-Google Maps to pick a place, Room for internal storage, Dagger for dependecy injection, two-way databinding and Unit/UI tests.
+Room for internal storage, Dagger for dependecy injection, two-way databinding and Unit/UI tests.
