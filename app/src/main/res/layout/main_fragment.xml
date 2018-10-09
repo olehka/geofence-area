@@ -54,6 +54,14 @@
             android:text="@string/check"
             app:layout_constraintTop_toBottomOf="@id/radius_edit" />
 
+        <Button
+            android:id="@+id/button_place_picker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/place_picker"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/radius_edit" />
+
         <TextView
             android:id="@+id/inside_label"
             android:layout_width="0dp"
@@ -64,6 +72,7 @@
             android:textAllCaps="true"
             android:textSize="24sp"
             android:visibility="gone"
+            tools:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintWidth_percent="0.5" />
 
@@ -77,6 +86,7 @@
             android:textAllCaps="true"
             android:textSize="24sp"
             android:visibility="gone"
+            tools:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintWidth_percent="0.5" />

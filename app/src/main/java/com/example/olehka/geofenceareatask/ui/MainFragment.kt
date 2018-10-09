@@ -1,8 +1,10 @@
 package com.example.olehka.geofenceareatask.ui
 
 import android.Manifest
+import android.app.Activity.RESULT_OK
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.design.widget.Snackbar
@@ -16,11 +18,13 @@ import com.example.olehka.geofenceareatask.R
 import com.example.olehka.geofenceareatask.databinding.MainFragmentBinding
 import com.example.olehka.geofenceareatask.util.InjectorUtility
 import com.example.olehka.geofenceareatask.viewmodel.MainViewModel
+import com.google.android.gms.location.places.ui.PlacePicker
 
 class MainFragment : Fragment() {
 
     companion object {
         const val REQUEST_CODE_GEOFENCE = 1001
+        const val REQUEST_PLACE_PICKER = 1002
         const val GEOFENCE_EXPIRATION_DURATION = 24L * 60 * 60 * 1000 // 24 hours
         fun newInstance() = MainFragment()
     }
@@ -31,7 +35,8 @@ class MainFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         binding = MainFragmentBinding.inflate(inflater, container, false)
-        binding.buttonCheck.setOnClickListener { onCheckClicked() }
+        binding.buttonCheck.setOnClickListener { checkStatus() }
+        binding.buttonPlacePicker.setOnClickListener { lauchPlacePicker() }
         return binding.root
     }
 
@@ -57,17 +62,33 @@ class MainFragment : Fragment() {
         }
     }
 
-    private fun onCheckClicked() {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        when (requestCode) {
+            REQUEST_PLACE_PICKER -> {
+                if (resultCode == RESULT_OK) {
+                    val place = PlacePicker.getPlace(context, data)
+                    binding.latitudeEdit.setText(place.latLng.latitude.toString())
+                    binding.longitudeEdit.setText(place.latLng.longitude.toString())
+                    checkStatus()
+                }
+            }
+        }
+    }
+
+    private fun lauchPlacePicker() {
+        val builder = PlacePicker.IntentBuilder()
+        startActivityForResult(builder.build(activity), REQUEST_PLACE_PICKER)
+    }
+
+    private fun checkStatus() {
         viewModel.wifiName = binding.wifiEdit.text.toString()
         viewModel.latitude = binding.latitudeEdit.text.toString().toDoubleOrNull()
         viewModel.longitude = binding.longitudeEdit.text.toString().toDoubleOrNull()
         viewModel.radius = binding.radiusEdit.text.toString().toFloatOrNull()
-
-        val hasValidGeofences = viewModel.startGeofencing()
-        if (hasValidGeofences && !hasGeofencePermissions()) {
+        viewModel.startGeofencing()
+        if (!hasGeofencePermissions()) {
             requestGeofencePermissions(REQUEST_CODE_GEOFENCE)
         }
-        viewModel.updateStatus()
     }
 
     private fun hasGeofencePermissions(): Boolean = ContextCompat.checkSelfPermission(context!!,

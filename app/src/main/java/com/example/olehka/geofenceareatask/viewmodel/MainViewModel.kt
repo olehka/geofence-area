@@ -42,7 +42,7 @@ class MainViewModel(
         }
     }
 
-    fun updateStatus() {
+    private fun updateStatus() {
         if (checkWifiZone() || checkGeofenceZone()) {
             mediatorLiveData.value = Status.INSIDE
         } else {
@@ -50,17 +50,15 @@ class MainViewModel(
         }
     }
 
-    fun startGeofencing(): Boolean {
-        if (invalidGeofence()) {
-            Log.e(TAG, "Invalid geofencing data")
-            return false
+    fun startGeofencing() {
+        if (validGeofence()) {
+            geofenceManager.createGeofenceObject(latitude!!, longitude!!, radius!!)
+            if (hasGeofencePermissions()) {
+                geofenceManager.removeGeofences()
+                geofenceManager.addGeofences()
+            }
         }
-        geofenceManager.createGeofenceObject(latitude!!, longitude!!, radius!!)
-        if (hasGeofencePermissions()) {
-            geofenceManager.removeGeofences()
-            geofenceManager.addGeofences()
-        }
-        return true
+        updateStatus()
     }
 
     fun addGeofences() = geofenceManager.addGeofences()
@@ -74,7 +72,7 @@ class MainViewModel(
     }
 
     private fun checkGeofenceZone(): Boolean {
-        if (invalidGeofence() || geofenceLiveData.value == null) {
+        if (!validGeofence() || geofenceLiveData.value == null) {
             return false
         }
         return geofenceLiveData.value == Geofence.GEOFENCE_TRANSITION_ENTER
@@ -83,9 +81,9 @@ class MainViewModel(
     private fun hasGeofencePermissions(): Boolean = ContextCompat.checkSelfPermission(getApplication(),
             Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
 
-    private fun invalidGeofence(): Boolean =
-            latitude == null || longitude == null || radius == null ||
-                    latitude!! < -90 || latitude!! > 90 ||
-                    longitude!! < -180 || longitude!! > 180 ||
-                    radius!! < 0
+    private fun validGeofence(): Boolean =
+            latitude != null && longitude != null && radius != null &&
+                    latitude!! >= -90 && latitude!! <= 90 &&
+                    longitude!! >= -180 && longitude!! <= 180 &&
+                    radius!! > 0
 }

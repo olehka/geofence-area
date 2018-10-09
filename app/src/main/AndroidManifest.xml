@@ -20,10 +20,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <service
             android:name=".geofence.GeofenceTransitionsIntentService"
             android:exported="true" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBmsWIxVweqmXdRBeirTIm_GCSPFx0MDnw" />
     </application>
 
 </manifest>
