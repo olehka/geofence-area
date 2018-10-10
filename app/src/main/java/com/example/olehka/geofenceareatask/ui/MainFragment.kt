@@ -53,7 +53,7 @@ class MainFragment : Fragment() {
         when (requestCode) {
             REQUEST_CODE_GEOFENCE -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    viewModel.addGeofences()
+                    viewModel.startGeofencing()
                 } else {
                     Log.e(TAG, "Permission denied")
                     Snackbar.make(binding.root, R.string.permission_denied_explanation, Snackbar.LENGTH_LONG)
@@ -69,7 +69,6 @@ class MainFragment : Fragment() {
                     val place = PlacePicker.getPlace(context, data)
                     binding.latitudeEdit.setText(place.latLng.latitude.toString())
                     binding.longitudeEdit.setText(place.latLng.longitude.toString())
-                    checkStatus()
                 }
             }
         }

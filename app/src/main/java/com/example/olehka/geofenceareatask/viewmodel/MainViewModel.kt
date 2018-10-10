@@ -61,8 +61,6 @@ class MainViewModel(
         updateStatus()
     }
 
-    fun addGeofences() = geofenceManager.addGeofences()
-
     private fun checkWifiZone(): Boolean {
         if (wifiName.isNullOrEmpty() || networkLiveData.value.isNullOrEmpty()) {
             return false
