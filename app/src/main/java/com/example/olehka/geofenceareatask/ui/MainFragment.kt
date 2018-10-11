@@ -84,8 +84,10 @@ class MainFragment : Fragment() {
         viewModel.latitude = binding.latitudeEdit.text.toString().toDoubleOrNull()
         viewModel.longitude = binding.longitudeEdit.text.toString().toDoubleOrNull()
         viewModel.radius = binding.radiusEdit.text.toString().toFloatOrNull()
-        viewModel.startGeofencing()
-        if (!hasGeofencePermissions()) {
+        viewModel.updateStatus()
+        if (hasGeofencePermissions()) {
+            viewModel.startGeofencing()
+        } else {
             requestGeofencePermissions(REQUEST_CODE_GEOFENCE)
         }
     }

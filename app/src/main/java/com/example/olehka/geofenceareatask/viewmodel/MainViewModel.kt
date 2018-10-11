@@ -3,27 +3,21 @@ package com.example.olehka.geofenceareatask.viewmodel
 import android.Manifest
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
-import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MediatorLiveData
 import android.content.pm.PackageManager
 import android.support.v4.content.ContextCompat
-import android.util.Log
-import com.example.olehka.geofenceareatask.geofence.GeofenceManager
-import com.example.olehka.geofenceareatask.geofence.GeofenceTransitionsIntentService
-import com.example.olehka.geofenceareatask.ui.TAG
+import com.example.olehka.geofenceareatask.data.Repository
 import com.google.android.gms.location.Geofence
 
 class MainViewModel(
         application: Application,
-        private val geofenceManager: GeofenceManager
+        private val repository: Repository
 ) : AndroidViewModel(application) {
 
     enum class Status {
         INSIDE, OUTSIDE
     }
 
-    val networkLiveData = NetworkLiveData(application)
-    val geofenceLiveData: LiveData<Int> = GeofenceTransitionsIntentService.geofenceData
     val mediatorLiveData = MediatorLiveData<Status>()
 
     var wifiName: String? = null
@@ -32,17 +26,17 @@ class MainViewModel(
     var radius: Float? = null
 
     init {
-        mediatorLiveData.addSource(networkLiveData) { updateStatus() }
-        mediatorLiveData.addSource(geofenceLiveData) { updateStatus() }
+        mediatorLiveData.addSource(repository.networkLiveData) { updateStatus() }
+        mediatorLiveData.addSource(repository.geofenceLiveData) { updateStatus() }
     }
 
     override fun onCleared() {
         if (hasGeofencePermissions()) {
-            geofenceManager.removeGeofences()
+            repository.removeGeofences()
         }
     }
 
-    private fun updateStatus() {
+    fun updateStatus() {
         if (checkWifiZone() || checkGeofenceZone()) {
             mediatorLiveData.value = Status.INSIDE
         } else {
@@ -52,28 +46,24 @@ class MainViewModel(
 
     fun startGeofencing() {
         if (validGeofence()) {
-            geofenceManager.createGeofenceObject(latitude!!, longitude!!, radius!!)
-            if (hasGeofencePermissions()) {
-                geofenceManager.removeGeofences()
-                geofenceManager.addGeofences()
-            }
+            repository.createGeofenceObject(latitude!!, longitude!!, radius!!)
+            repository.restartGeofences()
         }
-        updateStatus()
     }
 
     private fun checkWifiZone(): Boolean {
-        if (wifiName.isNullOrEmpty() || networkLiveData.value.isNullOrEmpty()) {
+        if (wifiName.isNullOrEmpty() || repository.networkLiveData.value.isNullOrEmpty()) {
             return false
         }
-        val wifiSsid = networkLiveData.value!!.replace("\"", "")
+        val wifiSsid = repository.networkLiveData.value!!.replace("\"", "")
         return wifiName!!.toLowerCase() == wifiSsid.toLowerCase()
     }
 
     private fun checkGeofenceZone(): Boolean {
-        if (!validGeofence() || geofenceLiveData.value == null) {
+        if (!validGeofence() || repository.geofenceLiveData.value == null) {
             return false
         }
-        return geofenceLiveData.value == Geofence.GEOFENCE_TRANSITION_ENTER
+        return repository.geofenceLiveData.value == Geofence.GEOFENCE_TRANSITION_ENTER
     }
 
     private fun hasGeofencePermissions(): Boolean = ContextCompat.checkSelfPermission(getApplication(),
