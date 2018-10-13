@@ -1,13 +1,12 @@
 package com.example.olehka.geofenceareatask.data
 
-import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
 import com.example.olehka.geofenceareatask.geofence.GeofenceManager
 import com.example.olehka.geofenceareatask.viewmodel.NetworkLiveData
 
 class Repository(
         private val geofenceManager: GeofenceManager,
-        val networkLiveData: NetworkLiveData,
-        val geofenceLiveData: LiveData<Int>
+        private val networkLiveData: NetworkLiveData
 ) {
 
     companion object {
@@ -17,14 +16,15 @@ class Repository(
 
         fun getInstance(
                 geofenceManager: GeofenceManager,
-                networkLiveData: NetworkLiveData,
-                geofenceLiveData: LiveData<Int>
+                networkLiveData: NetworkLiveData
         ) =
                 instance ?: synchronized(this) {
-                    instance ?: Repository(geofenceManager, networkLiveData, geofenceLiveData)
+                    instance ?: Repository(geofenceManager, networkLiveData)
                             .also { instance = it }
                 }
     }
+
+    private val geofenceLiveData: MutableLiveData<Int> = MutableLiveData()
 
     fun removeGeofences() = geofenceManager.removeGeofences()
 
@@ -35,4 +35,10 @@ class Repository(
 
     fun createGeofenceObject(latitude: Double, longitude: Double, radius: Float) =
             geofenceManager.createGeofenceObject(latitude, longitude, radius)
+
+    fun getNetworkLiveData() = networkLiveData
+
+    fun getGeofenceLiveData() = geofenceLiveData
+
+    fun setGeofenceLiveData(value: Int) = geofenceLiveData.postValue(value)
 }

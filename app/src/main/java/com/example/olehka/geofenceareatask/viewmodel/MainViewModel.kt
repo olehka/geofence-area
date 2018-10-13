@@ -26,8 +26,8 @@ class MainViewModel(
     var radius: Float? = null
 
     init {
-        mediatorLiveData.addSource(repository.networkLiveData) { updateStatus() }
-        mediatorLiveData.addSource(repository.geofenceLiveData) { updateStatus() }
+        mediatorLiveData.addSource(repository.getNetworkLiveData()) { updateStatus() }
+        mediatorLiveData.addSource(repository.getGeofenceLiveData()) { updateStatus() }
     }
 
     override fun onCleared() {
@@ -52,18 +52,18 @@ class MainViewModel(
     }
 
     private fun checkWifiZone(): Boolean {
-        if (wifiName.isNullOrEmpty() || repository.networkLiveData.value.isNullOrEmpty()) {
+        if (wifiName.isNullOrEmpty() || repository.getNetworkLiveData().value.isNullOrEmpty()) {
             return false
         }
-        val wifiSsid = repository.networkLiveData.value!!.replace("\"", "")
+        val wifiSsid = repository.getNetworkLiveData().value!!.replace("\"", "")
         return wifiName!!.toLowerCase() == wifiSsid.toLowerCase()
     }
 
     private fun checkGeofenceZone(): Boolean {
-        if (!validGeofence() || repository.geofenceLiveData.value == null) {
+        if (!validGeofence() || repository.getGeofenceLiveData().value == null) {
             return false
         }
-        return repository.geofenceLiveData.value == Geofence.GEOFENCE_TRANSITION_ENTER
+        return repository.getGeofenceLiveData().value == Geofence.GEOFENCE_TRANSITION_ENTER
     }
 
     private fun hasGeofencePermissions(): Boolean = ContextCompat.checkSelfPermission(getApplication(),

@@ -1,17 +1,21 @@
 package com.example.olehka.geofenceareatask.geofence
 
 import android.app.IntentService
-import android.arch.lifecycle.MutableLiveData
 import android.content.Intent
 import android.util.Log
+import com.example.olehka.geofenceareatask.data.Repository
 import com.example.olehka.geofenceareatask.ui.TAG
+import com.example.olehka.geofenceareatask.util.InjectorUtility
 import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofencingEvent
 
 class GeofenceTransitionsIntentService : IntentService(TAG) {
 
-    companion object {
-        val geofenceData = MutableLiveData<Int>()
+    private lateinit var repository: Repository
+
+    override fun onCreate() {
+        super.onCreate()
+        repository = InjectorUtility.getRepository(applicationContext)
     }
 
     override fun onHandleIntent(intent: Intent?) {
@@ -25,9 +29,7 @@ class GeofenceTransitionsIntentService : IntentService(TAG) {
         if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER ||
                 geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
             Log.i(TAG, "Geofence ENTER/EXIT transition: $geofenceTransition")
-            if (geofenceData.hasActiveObservers()) {
-                geofenceData.postValue(geofenceTransition)
-            }
+            repository.setGeofenceLiveData(geofenceTransition)
         } else {
             Log.e(TAG, "Geofence transition: Invalid type")
         }

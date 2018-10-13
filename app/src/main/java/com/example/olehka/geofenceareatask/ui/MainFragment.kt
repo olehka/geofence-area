@@ -36,7 +36,7 @@ class MainFragment : Fragment() {
                               savedInstanceState: Bundle?): View {
         binding = MainFragmentBinding.inflate(inflater, container, false)
         binding.buttonCheck.setOnClickListener { checkStatus() }
-        binding.buttonPlacePicker.setOnClickListener { lauchPlacePicker() }
+        binding.buttonPlacePicker.setOnClickListener { launchPlacePicker() }
         return binding.root
     }
 
@@ -74,7 +74,7 @@ class MainFragment : Fragment() {
         }
     }
 
-    private fun lauchPlacePicker() {
+    private fun launchPlacePicker() {
         val builder = PlacePicker.IntentBuilder()
         startActivityForResult(builder.build(activity), REQUEST_PLACE_PICKER)
     }
