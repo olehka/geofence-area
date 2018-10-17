@@ -18,6 +18,8 @@ import com.example.olehka.geofenceareatask.R
 import com.example.olehka.geofenceareatask.databinding.MainFragmentBinding
 import com.example.olehka.geofenceareatask.util.InjectorUtility
 import com.example.olehka.geofenceareatask.viewmodel.MainViewModel
+import com.example.permissions.PermissionManagerImpl
+import com.example.permissions.addObserver
 import com.google.android.gms.location.places.ui.PlacePicker
 
 class MainFragment : Fragment() {
@@ -31,6 +33,7 @@ class MainFragment : Fragment() {
 
     private lateinit var viewModel: MainViewModel
     private lateinit var binding: MainFragmentBinding
+    private val permissionManager = PermissionManagerImpl()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -45,21 +48,12 @@ class MainFragment : Fragment() {
         val factory = InjectorUtility.provideMainViewModelFactory(activity!!.application)
         viewModel = ViewModelProviders.of(this, factory).get(MainViewModel::class.java)
         viewModel.mediatorLiveData.observe(this, Observer { updateStatus(it) })
+        lifecycle.addObserver(permissionManager, this)
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int,
-                                            permissions: Array<out String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         Log.i(TAG, "onRequestPermissionsResult: requestCode = $requestCode")
-        when (requestCode) {
-            REQUEST_CODE_GEOFENCE -> {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    viewModel.startGeofencing()
-                } else {
-                    Log.e(TAG, "Permission denied")
-                    Snackbar.make(binding.root, R.string.permission_denied_explanation, Snackbar.LENGTH_LONG)
-                }
-            }
-        }
+        permissionManager.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -85,18 +79,16 @@ class MainFragment : Fragment() {
         viewModel.longitude = binding.longitudeEdit.text.toString().toDoubleOrNull()
         viewModel.radius = binding.radiusEdit.text.toString().toFloatOrNull()
         viewModel.updateStatus()
-        if (hasGeofencePermissions()) {
-            viewModel.startGeofencing()
-        } else {
-            requestGeofencePermissions(REQUEST_CODE_GEOFENCE)
-        }
+        permissionManager.requestThenRun(
+                listOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                this::showPermissionDeniedError,
+                viewModel::startGeofencing
+        )
     }
 
-    private fun hasGeofencePermissions(): Boolean = ContextCompat.checkSelfPermission(context!!,
-            Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-
-    private fun requestGeofencePermissions(requestCode: Int) {
-        requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), requestCode)
+    private fun showPermissionDeniedError() {
+        Log.e(TAG, "Permission denied")
+        Snackbar.make(binding.root, R.string.permission_denied_explanation, Snackbar.LENGTH_LONG)
     }
 
     private fun showInsideStatus() {

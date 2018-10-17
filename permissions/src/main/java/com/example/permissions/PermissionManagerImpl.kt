@@ -55,7 +55,7 @@ class PermissionManagerImpl : FragmentLifecycleObserver, ActivityLifecycleObserv
             action()
         } else {
             val id = Math.abs(handler.hashCode().toShort().toInt())
-            requestedPermissionHandlers.put(id, handler) //todo invent another way to generate keys
+            requestedPermissionHandlers[id] = handler //todo invent another way to generate keys
             permissionRequester(permissionArray, id)
         }
     }
